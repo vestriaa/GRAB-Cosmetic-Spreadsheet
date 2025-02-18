@@ -11,6 +11,9 @@
             text-align: center;
             font-family: Arial, sans-serif;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .btn-container {
             display: flex;
@@ -38,16 +41,35 @@
             font-size: 12px;
             color: gray;
         }
+        .updates-container {
+            margin-top: 20px;
+            width: 300px;
+            height: 200px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .update-box {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <h1>GRAB COSMETICS</h1>
-    <p class="version">Version: 1.5</p>
+    <p class="version">Version: 1.6</p>
     <div class="btn-container">
         <button class="btn" onclick="fetchCosmeticData()">Get Cosmetic Data!</button>
         <button class="btn" onclick="fetchDetailedCosmeticData()">Get Detailed Cosmetic Data!</button>
     </div>
-
+    <div class="updates-container">
+        <h2>UPDATES</h2>
+        <div id="updates"></div>
+    </div>
     <script>
         async function fetchItemNames() {
             const response = await fetch('https://api.slin.dev/grab/v1/get_shop_items?version=3');
@@ -77,8 +99,6 @@
                 { wch: 20 },
                 { wch: 50 }
             ];
-            worksheet['A1'].s = { font: { bold: true, sz: 14, color: { rgb: "FFFFFF" } }, fill: { fgColor: { rgb: "006400" } } };
-            worksheet['B1'].s = { font: { bold: true, sz: 14, color: { rgb: "000000" } }, fill: { fgColor: { rgb: "DAA520" } } };
         }
 
         async function fetchCosmeticData() {
@@ -139,6 +159,17 @@
                 alert("Failed to fetch detailed cosmetic data.");
             }
         }
+
+        async function loadUpdates() {
+            try {
+                const response = await fetch('updates.txt');
+                const text = await response.text();
+                document.getElementById('updates').innerHTML = text.split('\n\n').map(update => `<div class='update-box'>${update.replace(/\n/g, '<br>')}</div>`).join('');
+            } catch (error) {
+                document.getElementById('updates').innerText = "Failed to load updates.";
+            }
+        }
+        loadUpdates();
     </script>
 </body>
 </html>
