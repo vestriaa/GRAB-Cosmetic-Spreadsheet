@@ -74,7 +74,10 @@
                     return;
                 }
 
-                const dataArray = Object.values(data).map(item => [item.title, item.price_currency || "N/A"]);
+                const dataArray = Object.values(data)
+                    .filter(item => item.title.toLowerCase() !== "test pack")
+                    .map(item => [item.title, item.price_currency || "N/A"]);
+                
                 const worksheet = XLSX.utils.aoa_to_sheet([['Pack Name', 'Cost']].concat(dataArray));
                 formatWorksheet(worksheet);
 
@@ -99,14 +102,16 @@
                     return;
                 }
 
-                const dataArray = Object.values(data).map(item => {
-                    let itemCount = item.items.length;
-                    const hasRotation = item.items.some(i => i.includes("rotation"));
-                    if (itemCount === 1 || hasRotation) itemCount = "";
-                    const namedItems = item.items.map(i => itemNames[i] || i).join(", ");
-                    return [item.title, namedItems, itemCount];
-                });
-
+                const dataArray = Object.values(data)
+                    .filter(item => item.title.toLowerCase() !== "test pack")
+                    .map(item => {
+                        let itemCount = item.items.length;
+                        const hasRotation = item.items.some(i => i.includes("rotation"));
+                        if (itemCount === 1 || hasRotation) itemCount = "";
+                        const namedItems = item.items.map(i => itemNames[i] || i).join(", ");
+                        return [item.title, namedItems, itemCount];
+                    });
+                
                 const worksheet = XLSX.utils.aoa_to_sheet([['Pack Name', 'Cosmetics', 'Number of Items']].concat(dataArray));
                 formatWorksheet(worksheet);
 
