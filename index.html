@@ -42,12 +42,15 @@
 
                 console.log("Parsed Data:", data); // Debugging line
 
-                if (!Array.isArray(data)) {
+                if (typeof data !== "object") {
                     alert("Unexpected API response format. Check console.");
                     return;
                 }
 
-                const worksheetData = data.map(item => [item.title, item.price_currency]);
+                // Convert object values to an array
+                const dataArray = Object.values(data);
+
+                const worksheetData = dataArray.map(item => [item.title, item.price_currency]);
                 const worksheet = XLSX.utils.aoa_to_sheet([['Pack Name', 'Cost']].concat(worksheetData));
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "Cosmetic Data");
@@ -67,12 +70,15 @@
 
                 console.log("Parsed Data:", data); // Debugging line
 
-                if (!Array.isArray(data)) {
+                if (typeof data !== "object") {
                     alert("Unexpected API response format. Check console.");
                     return;
                 }
 
-                const worksheetData = data.map(item => {
+                // Convert object values to an array
+                const dataArray = Object.values(data);
+
+                const worksheetData = dataArray.map(item => {
                     let itemCount = item.items.length;
                     const hasRotation = item.items.some(i => i.includes("rotation"));
                     if (itemCount === 1 || hasRotation) itemCount = "";
