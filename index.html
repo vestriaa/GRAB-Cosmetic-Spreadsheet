@@ -12,8 +12,8 @@
             font-family: Arial, sans-serif;
             padding: 20px;
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
         }
         .btn-container {
             display: flex;
@@ -42,14 +42,14 @@
             color: gray;
         }
         .updates-container {
+            margin-top: 20px;
             width: 300px;
-            height: 400px;
+            height: 200px;
             overflow-y: auto;
             background: rgba(255, 255, 255, 0.5);
             padding: 10px;
             border-radius: 10px;
             text-align: left;
-            margin-right: 20px;
         }
         .update-box {
             background: rgba(255, 255, 255, 0.8);
@@ -60,17 +60,15 @@
     </style>
 </head>
 <body>
+    <h1>GRAB COSMETICS</h1>
+    <p class="version">Version: 1.6</p>
+    <div class="btn-container">
+        <button class="btn" onclick="fetchCosmeticData()">Get Cosmetic Data!</button>
+        <button class="btn" onclick="fetchDetailedCosmeticData()">Get Detailed Cosmetic Data!</button>
+    </div>
     <div class="updates-container">
         <h2>UPDATES</h2>
         <div id="updates"></div>
-    </div>
-    <div>
-        <h1>GRAB COSMETICS</h1>
-        <p class="version">Version: 1.6</p>
-        <div class="btn-container">
-            <button class="btn" onclick="fetchCosmeticData()">Get Cosmetic Data!</button>
-            <button class="btn" onclick="fetchDetailedCosmeticData()">Get Detailed Cosmetic Data!</button>
-        </div>
     </div>
     <script>
         async function fetchItemNames() {
@@ -101,6 +99,9 @@
                 { wch: 20 },
                 { wch: 50 }
             ];
+            worksheet['A1'].s = worksheet['B1'].s = worksheet['C1'].s = worksheet['D1'].s = {
+                font: { bold: true, sz: 14 }
+            };
         }
 
         async function fetchCosmeticData() {
