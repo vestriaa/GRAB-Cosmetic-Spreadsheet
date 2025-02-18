@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmetic Data Fetcher</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body {
+            background-color: #2ecc71;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #1e8449;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cosmetic Data Fetcher</h1>
+    <button class="btn" onclick="fetchCosmeticData()">Get Cosmetic Data!</button>
+    <button class="btn" onclick="fetchDetailedCosmeticData()">Get Detailed Cosmetic Data!</button>
+
+    <script>
+        async function fetchCosmeticData() {
+            const response = await fetch('https://api.slin.dev/grab/v1/get_shop_products?version=3');
+            const data = await response.json();
+            const worksheetData = data.map(item => [item.title, item.price_currency]);
+            
+            const worksheet = XLSX.utils.aoa_to_sheet([["Pack Name", "Cost"]].concat(worksheetData));
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Cosmetic Data");
+            XLSX.writeFile(workbook, "cosmetic_data.xlsx");
+        }
+
+        async function fetchDetailedCosmeticData() {
+            const response = await fetch('https://api.slin.dev/grab/v1/get_shop_products?version=3');
+            const data = await response.json();
+            
+            const worksheetData = data.map(item => {
+                let itemCount = item.items.length;
+                const hasRotation = item.items.some(i => i.includes("rotation"));
+                if (itemCount === 1 || hasRotation) itemCount = "";
+                return [item.title, item.items.join(", "), itemCount];
+            });
+            
+            const worksheet = XLSX.utils.aoa_to_sheet([["Pack Name", "Cosmetics", "Number of Items"]].concat(worksheetData));
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Detailed Cosmetic Data");
+            XLSX.writeFile(workbook, "detailed_cosmetic_data.xlsx");
+        }
+    </script>
+</body>
+</html>
