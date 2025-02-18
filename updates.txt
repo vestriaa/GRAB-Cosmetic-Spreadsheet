@@ -1,1 +1,11 @@
-update test
+Version 1.6 - 
+- changed how the spreadsheet looks
+- removed test pack (again)
+
+Version 1.5 - 
+- removed excel buttons because suck
+- Proper item names instead of file names
+
+Version 1.4 - UI
+- added a gradient background 
+- fixed api thing
